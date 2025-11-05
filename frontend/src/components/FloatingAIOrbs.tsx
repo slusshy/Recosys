@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useTransform, MotionValue } from 'framer-motion';
+
+interface FloatingAIOrbsProps {
+  count?: number;
+  className?: string;
+}
 
 // Reusable animated background of subtle red orbs
 // Usage: <div className="relative overflow-hidden"><FloatingAIOrbs /><HeroSection /></div>
-export default function FloatingAIOrbs(props) {
-  const { count = 18, className = '' } = props || {};
-  const ref = useRef(null);
+export default function FloatingAIOrbs({ count = 18, className = '' }: FloatingAIOrbsProps) {
+  const ref = useRef<HTMLDivElement>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const translateX = useTransform(mx, [-60, 60], [-8, 8]);
@@ -15,10 +19,9 @@ export default function FloatingAIOrbs(props) {
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    const onMove = (e) => {
-      const el = ref.current as unknown as HTMLDivElement | null;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
+    const onMove = (e: MouseEvent) => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
       const x = e.clientX - (rect.left + rect.width / 2);
       const y = e.clientY - (rect.top + rect.height / 2);
       // clamp for soft parallax
