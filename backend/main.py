@@ -19,7 +19,8 @@ origins = [
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",
     "http://127.0.0.1:5173",
-    "https://690b7d04b5adea427e7005a9--reco-sys.netlify.app/",  # Replace with actual Netlify URL
+    # Production frontend
+    "https://reco-sys.netlify.app",
 ]
 
 app.add_middleware(
@@ -45,3 +46,13 @@ app.include_router(tmdb_router, prefix="/api", tags=["tmdb"])
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+# Helpful API root so /api doesn't 404
+@app.get("/api")
+async def api_root():
+    return {"status": "ok", "message": "API root", "endpoints": [
+        "/api/recommendations/",
+        "/api/recommendations/trending",
+        "/health"
+    ]}
