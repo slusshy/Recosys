@@ -1,5 +1,15 @@
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
 pydantic==2.9.2
+python-multipart==0.0.9
+sqlalchemy==2.0.36
 python-dotenv==1.0.1
 httpx==0.27.0
+openai==1.12.0
+transformers==4.45.2
+# Use a torch version compatible with Python 3.13 on Windows
+# CPU-only build to avoid CUDA dependency here; adjust if you have GPU
+# See https://pytorch.org/get-started/locally/
+torch==2.7.0
+numpy==1.26.4
+# pandas removed to avoid Windows build tool dependency
