@@ -5,14 +5,15 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Create and set the working directory
-WORKDIR /app
+# Set working directory
+WORKDIR /app/backend
 
-# Copy the entire project structure
-COPY . .
+# Copy requirements first for better caching
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN pip install --no-cache-dir -r backend/requirements.txt
+# Copy the backend code
+COPY backend/ .
 
 # Set PYTHONPATH to include the app directory
 ENV PYTHONPATH="/app"
@@ -20,5 +21,8 @@ ENV PYTHONPATH="/app"
 # Expose port
 EXPOSE 10000
 
+# Make the start script executable
+RUN chmod +x /app/start.sh
+
 # Run the application
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "10000"]
+CMD ["/app/start.sh"]
