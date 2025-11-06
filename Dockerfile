@@ -1,19 +1,18 @@
 FROM python:3.11-slim
 
-# Set working directory
-WORKDIR /app
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Create and set the working directory
+WORKDIR /app
 
 # Copy the entire project structure
-COPY . /app/
+COPY . .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # Set PYTHONPATH to include the app directory
 ENV PYTHONPATH="/app"
@@ -22,4 +21,4 @@ ENV PYTHONPATH="/app"
 EXPOSE 10000
 
 # Run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "10000"]

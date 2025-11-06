@@ -1,12 +1,20 @@
+import os
+import sys
+from pathlib import Path
+
+# Add the parent directory to the Python path
+sys.path.append(str(Path(__file__).parent.parent))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-from routers.recommendations import router as recommendations_router
-from routers.contact import router as contact_router
-from routers.auth import router as auth_router
-from routers.tmdb import router as tmdb_router
+
+# Import routers with absolute paths
+from backend.routers.recommendations import router as recommendations_router
+from backend.routers.contact import router as contact_router
+from backend.routers.auth import router as auth_router
+from backend.routers.tmdb import router as tmdb_router
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 APP_NAME = os.getenv("APP_NAME", "AI RecoSys Backend")
